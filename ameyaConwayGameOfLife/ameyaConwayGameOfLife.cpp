@@ -106,8 +106,52 @@ public:
                 initialGrid = grid;
             }*/
             displayGrid();
+            if (_kbhit()) {
+                char ch = _getch();
+                if (ch == 'p' || ch == 'P') {
+                    cout << "Simulation paused. Press 'R' to resume or 'S' to save the current grid. \n";
+                    char choice = _getch();
+                    if (choice == 'r' || choice == 'R') {
+                        continue;
+                    }
+                    else if (choice == 's' || choice == 'S') {
+                        string fileName;
+                        cout << "Enter filename to save the current grid state: ";
+                        cin >> fileName;
+                        saveGame(fileName);
+                        cout << "Simulation saved. Press 'R' to resume or any other key to quit.\n";
+                        char secondChoice = _getch();
+                        if (secondChoice == 'r' || secondChoice == 'R') {
+                            continue;
+                        }
+                        else {
+                            return;
+                        }
+                        //return;
+                    }
+                }
+            }
             updateGrid();
             Sleep(200);
+
+            /*if (_kbhit()) {
+                char ch = _getch();
+                if (ch == 'p' || ch == 'P') {
+                    cout << "Simulation paused. Press 'R' to resume or 'S' to save the current grid. \n";
+                    char choice = _getch();
+                    if (choice == 'r' || choice == 'R') {
+                        continue;
+                    }
+                    else if (choice == 's' || choice == 'S') {
+                        string fileName;
+                        cout << "Enter filename to save the current grid state: ";
+                        cin >> fileName;
+                        saveGame(fileName);
+                        cout << "\nSimulation saved. Press 'E' to continue or 'Q' to quit.";
+                        return;
+                    }
+                }
+            }*/
         }
     }
 
