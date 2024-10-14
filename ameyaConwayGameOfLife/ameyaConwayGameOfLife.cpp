@@ -1,8 +1,10 @@
 #include <iostream>
+#include <limits>
 #include <vector>
 #include <cstdlib>
 #include <ctime>
 #include <fstream>
+#include <conio.h>
 //#include <unistd.h> // for sleep in Linux. Use <windows.h> and Sleep(ms) for Windows
 #include <windows.h>
 
@@ -11,7 +13,7 @@ using namespace std;
 class GameOfLife {
 private:
     int rows, cols;
-    vector<vector<int>> grid, tempGrid;
+    vector<vector<int>> grid, tempGrid, initialGrid;
 
     // Helper to check if a cell is valid
     bool isValid(int x, int y) {
@@ -100,6 +102,9 @@ public:
     // Run the game for a given number of steps
     void run(int steps) {
         for (int i = 0; i < steps; ++i) {
+            /*if (i == 0) {
+                initialGrid = grid;
+            }*/
             displayGrid();
             updateGrid();
             Sleep(200);
@@ -120,10 +125,11 @@ public:
             cout << "Game has been saved to " << fileName << "\n";
         }
         else {
-            cerr << "Unable to save game. \n";
+            cout << "Unable to save game. \n";
         }
     }
 
+    //Possible refactoring of this function could be to make it void
     bool loadGame(const string& fileName) {
         ifstream file(fileName);
         if (file.is_open()) {
@@ -140,7 +146,7 @@ public:
             return true;
         }
         else {
-            cerr << "Error: Unable to load the game.\n";
+            cout << "Error: Unable to load the game.\n";
             return false;
         }
     }
@@ -155,11 +161,11 @@ T getValidatedInput(const string& prompt) {
 
         if (cin.fail()) {
             cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cin.ignore(1000, '\n');
             cout << "Invalid input. Please enter an integer value.\n";
         }
         else {
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cin.ignore(1000, '\n');
             return value;
         }
     }
@@ -167,8 +173,38 @@ T getValidatedInput(const string& prompt) {
 
 int main() {
     int rows, cols, aliveCells, steps;
+    char choice;
+    GameOfLife* game = nullptr;
 
-    cout << "Enter the number of rows: ";
+    cout << "Do you want to load a saved game? (Y/N): ";
+    cin >> choice;
+
+    if (choice == 'Y' || choice == 'y') {
+        string fileName;
+        cout << "Enter the filename to load: ";
+        cin >> fileName;
+        game = new GameOfLife(0, 0);
+        if (game->loadGame(fileName)) {
+            cout << "Enter the number of steps to run: ";
+            steps = getValidatedInput<int>("Steps: ");
+            game->run(steps);
+        }
+    } else {
+            rows = getValidatedInput<int>("Enter the number of rows: ");
+            cols = getValidatedInput<int>("Enter the number of columns: ");
+            aliveCells = getValidatedInput<int>("Enter the number of initial alive cells: ");
+            steps = getValidatedInput<int>("Enter the number of steps: ");
+
+            game = new GameOfLife(rows, cols);
+            game->initializeGrid(aliveCells);
+            system("CLS");
+            game->run(steps);
+    }
+
+    delete game;
+    return 0;
+
+    /*cout << "Enter the number of rows: ";
     cin >> rows;
     cout << "Enter the number of columns: ";
     cin >> cols;
@@ -181,5 +217,5 @@ int main() {
     game.initializeGrid(aliveCells);
     game.run(steps);
 
-    return 0;
+    return 0;*/
 }
