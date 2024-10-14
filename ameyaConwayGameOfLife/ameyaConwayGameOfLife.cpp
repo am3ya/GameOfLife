@@ -116,9 +116,13 @@ public:
                     }
                     else if (choice == 's' || choice == 'S') {
                         string fileName;
-                        cout << "Enter filename to save the current grid state: ";
+                        char iOrC;
+                        cout << "Enter filename to save to: ";
                         cin >> fileName;
-                        saveGame(fileName);
+                        cout << endl;
+                        cout << "Press 'i' if you want to save the grid of step 1 or press 'c' if you want to save the current step. \n";
+                        cin >> iOrC;
+                        saveGame(fileName, iOrC);
                         cout << "Simulation saved. Press 'R' to resume or any other key to quit.\n";
                         char secondChoice = _getch();
                         if (secondChoice == 'r' || secondChoice == 'R') {
@@ -155,7 +159,7 @@ public:
         }
     }
 
-    void saveGame(const string& fileName) {
+    void saveGame(const string& fileName, char gridToSave) {
         ofstream file(fileName);
         if (file.is_open()) {
             file << rows << " " << cols << "\n";
