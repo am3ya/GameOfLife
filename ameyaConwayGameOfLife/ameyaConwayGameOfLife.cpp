@@ -17,6 +17,7 @@ private:
     vector<vector<int>> grid, tempGrid, initialGrid;
     bool blockFound;
     bool horizontalBeehiveFound;
+    bool verticalBeehiveFound;
 
     // Helper to check if a cell is valid
     bool isValid(int x, int y) {
@@ -230,6 +231,28 @@ private:
         }
     }
 
+    bool checkForVerticalBehhive() {
+        for (int i = 0; i < 27; ++i) {
+            for (int j = 1; j < cols - 1; ++j) {
+                if (grid[i][j] == 1 && grid[i + 1][j + 1] == 1 && grid[i + 2][j + 1] == 1
+                    && grid[i + 3][j] == 1 && grid[i + 2][j - 1] == 1 && grid[i + 1][j - 1] == 1) {
+
+                    if ((countAliveNeighbors(i, j) == 2) && (countAliveNeighbors(i + 1, j + 1) == 2)
+                        && (countAliveNeighbors(i + 2, j + 1) == 2) && (countAliveNeighbors(i + 3, j) == 2)
+                        && (countAliveNeighbors(i + 2, j - 1) == 2) && (countAliveNeighbors(i + 1, j - 1) == 2)) {
+
+
+                        cout << endl;
+                        cout << "\nTop cell of the vertical beehive is " << i << ", " << j << endl;
+                        verticalBeehiveFound = true;
+                        return true;
+                    }
+
+                }
+            }
+        }
+    }
+
 
 
     // Check for blocks and notify the user
@@ -315,6 +338,8 @@ public:
             blockCheckThread.join();
             thread horizontalBeehiveThread(&GameOfLife::checkForHorizontalBeehive, this);
             horizontalBeehiveThread.join();
+            thread verticalBeehiveThread(&GameOfLife::checkForVerticalBehhive, this);
+            verticalBeehiveThread.join();
 
             if (blockFound) {
                 cout << "Simulation paused because a block was detected\n";
@@ -352,6 +377,40 @@ public:
 
             if (horizontalBeehiveFound) {
                 cout << "Simulation paused because a horizontal beehive was detected\n";
+                cout << "Press 'r' to resume or 's' to save or 'q' to quit.\n";
+
+                // Pause the simulation and wait for user input
+                while (true) {
+                    char ch = _getch();
+                    if (ch == 'r' || ch == 'R') {
+                        break; // Resume the simulation
+                    }
+                    else if (ch == 'q' || ch == 'Q') {
+                        exit(0); // Quit the simulation
+                    }
+                    else if (ch == 's' || ch == 'S') {
+                        string fileName;
+                        char iOrC;
+                        cout << "Enter filename to save to: ";
+                        cin >> fileName;
+                        cout << endl;
+                        cout << "Press 'i' if you want to save the grid of step 1 or press 'c' if you want to save the current step. \n";
+                        cin >> iOrC;
+                        saveGame(fileName, iOrC);
+                        cout << "\nSimulation saved. Press 'R' to resume or any other key to quit.\n";
+                        char secondChoice = _getch();
+                        if (secondChoice == 'r' || secondChoice == 'R') {
+                            continue;
+                        }
+                        else {
+                            return;
+                        }
+                    }
+                }
+            }
+
+            if (verticalBeehiveFound) {
+                cout << "Simulation paused because a vertical beehive was detected\n";
                 cout << "Press 'r' to resume or 's' to save or 'q' to quit.\n";
 
                 // Pause the simulation and wait for user input
