@@ -1,3 +1,4 @@
 ﻿  ameyaConwayGameOfLife.cpp
-C:\Users\c4011955\source\repos\ameyaConwayGameOfLife\ameyaConwayGameOfLife\ameyaConwayGameOfLife.cpp(94,19): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\c4011955\source\repos\ameyaConwayGameOfLife\ameyaConwayGameOfLife\ameyaConwayGameOfLife.cpp(259,19): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\c4011955\source\repos\ameyaConwayGameOfLife\ameyaConwayGameOfLife\ameyaConwayGameOfLife.cpp(212,1): warning C4715: 'GameOfLife::checkForBlocks': not all control paths return a value
   ameyaConwayGameOfLife.vcxproj -> C:\Users\c4011955\source\repos\ameyaConwayGameOfLife\x64\Debug\ameyaConwayGameOfLife.exe
