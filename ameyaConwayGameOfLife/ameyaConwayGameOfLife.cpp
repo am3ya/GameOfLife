@@ -33,6 +33,27 @@ private:
         return aliveNeighbors;
     }
 
+    // Detect if there's a block
+    /*bool isBlockAt(int x, int y) {
+        // Check if (x, y) is the top-left corner of a 2x2 block
+        if (isValid(x, y) && isValid(x + 1, y) && isValid(x, y + 1) && isValid(x + 1, y + 1)) {
+            if (grid[x][y] == 1 && grid[x + 1][y] == 1 && grid[x][y + 1] == 1 && grid[x + 1][y + 1] == 1) {
+                // Now check surrounding neighbors
+                for (int i = -1; i <= 2; ++i) {
+                    for (int j = -1; j <= 2; ++j) {
+                        if (!(i == 0 && j == 0) && !(i == 1 && j == 1) && isValid(x + i, y + j)) {
+                            if (grid[x + i][y + j] == 1) {
+                                return false; // There's an alive neighbor around the block
+                            }
+                        }
+                    }
+                }
+                return true; // Found a block
+            }
+        }
+        return false;
+    }*/
+
     // Update the grid for the next step
     void updateGrid() {
         tempGrid = grid; // Copy current state
@@ -79,6 +100,121 @@ private:
         //cout << "\n";
     }
 
+    //Graham might kill me with his bare hands if this works
+    //This function does not check cubes that have points on the edges what a pain in the ass
+    bool checkForBlocks() {
+        int blockStep;
+        for (int i = 0; i < rows - 1; ++i) {
+            for (int j = 0; j < cols - 1; ++j) {
+                if (grid[i][j] == 1 && grid[i + 1][j] == 1 && grid[i][j + 1] == 1 && grid[i + 1][j + 1] == 1) {
+
+
+                    if (isValid(i - 1, j - 1)) {
+                        if (grid[i - 1][j - 1] == 1) {
+                            return false;
+                        }
+                    }
+
+                    if (isValid(i - 1, j)) {
+                        if (grid[i - 1][j] == 1) {
+                            return false;
+                        }
+                    }
+
+                    if (isValid(i - 1, j + 1)) {
+                        if (grid[i - 1][j + 1] == 1) {
+                            return false;
+                        }
+                    }
+
+                    if (isValid(i - 1, j + 2)) {
+                        if (grid[i - 1][j + 2] == 1) {
+                            return false;
+                        }
+                    }
+
+                    if (isValid(i, j + 2)) {
+                        if (grid[i][j + 2] == 1) {
+                            return false;
+                        }
+                    }
+
+                    if (isValid(i + 1, j + 2)) {
+                        if (grid[i + 1][j + 2] == 1) {
+                            return false;
+                        }
+                    }
+
+                    if (isValid(i + 2, j + 2)) {
+                        if (grid[i + 2][j + 2] == 1) {
+                            return false;
+                        }
+                    }
+
+                    if (isValid(i + 2, j + 1)) {
+                        if (grid[i + 2][j + 1] == 1) {
+                            return false;
+                        }
+                    }
+
+                    if (isValid(i + 2, j)) {
+                        if (grid[i + 2][j] == 1) {
+                            return false;
+                        }
+                    }
+
+                    if (isValid(i + 2, j - 1)) {
+                        if (grid[i + 2][j - 1] == 1) {
+                            return false;
+                        }
+                    }
+
+                    if (isValid(i + 1, j - 1)) {
+                        if (grid[i + 1][j - 1] == 1) {
+                            return false;
+                        }
+                    }
+
+                    if (isValid(i , j - 1)) {
+                        if (grid[i][j - 1] == 1) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+
+
+
+                    /*if (grid[i - 1][j - 1] == 0 && grid[i - 1][j] == 0 && grid[i - 1][j + 1] == 0 && grid[i - 1][j + 2] == 0
+                        && grid[i][j + 2] == 0 && grid[i + 1][j + 2] == 0 && grid[i + 2][j + 2] == 0 && grid[i + 2][j + 1] == 0
+                        && grid[i + 2][j] == 0 && grid[i + 2][j - 1] == 0 && grid[i + 1][j - 1] == 0 && grid[i][j - 1] == 0) {
+                        //blockStep = stepCount;
+                        //cout << "\nA block has been formed" << endl;
+                        return true;
+                    }*/
+                }
+            }
+        }
+        //return false;
+        //cout << "No blocks found. \n";
+    }
+
+    // Check for blocks and notify the user
+    /*void checkForBlocks() {
+        bool blockFound = false;
+        for (int i = 0; i < rows - 1; ++i) {
+            for (int j = 0; j < cols - 1; ++j) {
+                if (isBlockAt(i, j)) {
+                    cout << "Block found at position (" << i << ", " << j << ")\n";
+                    blockFound = true;
+                }
+            }
+        }
+        if (!blockFound) {
+            cout << "No blocks found.\n";
+        }
+    }*/
+
 public:
 
     int stepCount = 1;
@@ -90,26 +226,97 @@ public:
     }
 
     // Initialize the grid with random alive cells
-    void initializeGrid(int aliveCells) {
+    /*void initializeGrid(int aliveCells) {
         srand(time(0)); // Seed for random number generation
         for (int i = 0; i < aliveCells; ++i) {
             int x = rand() % rows;
             int y = rand() % cols;
             grid[x][y] = 1;
         }
+    }*/
+
+    // Initialize the grid with random alive cells
+    void initializeGrid(int aliveCells) {
+        srand(time(0)); // Seed for random number generation
+        int placedCells = 0;
+        while (placedCells < aliveCells) {
+            int x = rand() % rows;
+            int y = rand() % cols;
+
+            // Check if the cell is already alive
+            if (grid[x][y] == 0) {
+                grid[x][y] = 1; // Mark the cell as alive
+                placedCells++;
+            }
+        }
+        initialGrid = grid;
     }
+
+    // Overloading the << operator to print the grid
+    /*friend ostream& operator<<(ostream& os, const GameOfLife& game) {
+        os << "\033[H";
+        //int stepCount = 1;
+        //system("CLS"); // Clears the console (use "CLS" for Windows)
+        //os << "Step " << game.stepCount << ": " << "\n";
+        for (int i = 0; i < game.rows; ++i) {
+            for (int j = 0; j < game.cols; ++j) {
+                os << ". ";
+                os << (game.grid[i][j] ? 'O' : ' ') << " ";
+            }
+            os << ".\n";
+        }
+        //game.stepCount++;
+        return os;
+    }*/
 
     // Run the game for a given number of steps
     void run(int steps) {
+        system("CLS");
         for (int i = 0; i < steps; ++i) {
-            /*if (i == 0) {
+            if (i == 0) {
                 initialGrid = grid;
-            }*/
+            }
             displayGrid();
+
+            if (checkForBlocks() == true) {
+                cout << "Simulation paused because a block was detected\n";
+                cout << "Press 'r' to resume or 's' to save or 'q' to quit.\n";
+
+                // Pause the simulation and wait for user input
+                while (true) {
+                    char ch = _getch();
+                    if (ch == 'r' || ch == 'R') {
+                        break; // Resume the simulation
+                    }
+                    else if (ch == 'q' || ch == 'Q') {
+                        exit(0); // Quit the simulation
+                    }
+                    else if (ch == 's' || ch == 'S') {
+                        string fileName;
+                        char iOrC;
+                        cout << "Enter filename to save to: ";
+                        cin >> fileName;
+                        cout << endl;
+                        cout << "Press 'i' if you want to save the grid of step 1 or press 'c' if you want to save the current step. \n";
+                        cin >> iOrC;
+                        saveGame(fileName, iOrC);
+                        cout << "\nSimulation saved. Press 'R' to resume or any other key to quit.\n";
+                        char secondChoice = _getch();
+                        if (secondChoice == 'r' || secondChoice == 'R') {
+                            continue;
+                        }
+                        else {
+                            return;
+                        }
+                    }
+                }
+            }
+            //cout << "Step " << i + 1 << ": \n";
+            //cout << *this;
             if (_kbhit()) {
                 char ch = _getch();
                 if (ch == 'p' || ch == 'P') {
-                    cout << "Simulation paused. Press 'R' to resume or 'S' to save the current grid. \n";
+                    cout << "\nSimulation paused. Press 'R' to resume or 'S' to save the grid. \n";
                     char choice = _getch();
                     if (choice == 'r' || choice == 'R') {
                         continue;
@@ -136,7 +343,7 @@ public:
                 }
             }
             updateGrid();
-            Sleep(200);
+            Sleep(200); //200 for regular simulation, increase for shape testing
 
             /*if (_kbhit()) {
                 char ch = _getch();
@@ -165,7 +372,12 @@ public:
             file << rows << " " << cols << "\n";
             for (int i = 0; i < rows; ++i) {
                 for (int j = 0; j < cols; ++j) {
+                    if (gridToSave == 'c' || gridToSave == 'C') {
                     file << grid[i][j] << " ";
+                    }
+                    else {
+                        file << initialGrid[i][j] << " ";
+                    }
                 }
                 file << "\n";
             }
