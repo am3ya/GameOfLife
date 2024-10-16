@@ -18,6 +18,9 @@ private:
     bool blockFound;
     bool horizontalBeehiveFound;
     bool verticalBeehiveFound;
+    bool blinkerHToVFound;
+    bool blinkerVToHFound;
+    bool toadFound;
 
     // Helper to check if a cell is valid
     bool isValid(int x, int y) {
@@ -211,7 +214,7 @@ private:
 
     bool checkForHorizontalBeehive() {
         for (int i = 1; i < rows - 1; ++i) {
-            for (int j = 0; j < 27; ++j) {
+            for (int j = 0; j < cols - 3; ++j) {
                 if (grid[i][j] == 1 && grid[i - 1][j + 1] == 1 && grid[i - 1][j + 2] == 1
                     && grid[i][j + 3] == 1 && grid[i + 1][j + 2] == 1 && grid[i + 1][j + 1] == 1) {
 
@@ -232,7 +235,7 @@ private:
     }
 
     bool checkForVerticalBehhive() {
-        for (int i = 0; i < 27; ++i) {
+        for (int i = 0; i < rows - 3; ++i) {
             for (int j = 1; j < cols - 1; ++j) {
                 if (grid[i][j] == 1 && grid[i + 1][j + 1] == 1 && grid[i + 2][j + 1] == 1
                     && grid[i + 3][j] == 1 && grid[i + 2][j - 1] == 1 && grid[i + 1][j - 1] == 1) {
@@ -253,23 +256,76 @@ private:
         }
     }
 
+    bool checkForBlinkerHtoV() {
+        for (int i = 1; i < rows - 1; ++i) {
+            for (int j = 1; j < cols - 1; ++j) {
+                if (grid[i][j] == 1 && grid[i][j - 1] == 1 && grid[i][j + 1] == 1) {
 
+                    if ((countAliveNeighbors(i, j) == 2) && (countAliveNeighbors(i, j - 1) == 1) && (countAliveNeighbors(i, j + 1) == 1)
+                        && (countAliveNeighbors(i-1, j+1) == 2) && (countAliveNeighbors(i+1, j+1) == 2) && (countAliveNeighbors(i+1, j-1) == 2)
+                        && (countAliveNeighbors(i-1, j-1) == 2)) {
 
-    // Check for blocks and notify the user
-    /*void checkForBlocks() {
-        bool blockFound = false;
-        for (int i = 0; i < rows - 1; ++i) {
-            for (int j = 0; j < cols - 1; ++j) {
-                if (isBlockAt(i, j)) {
-                    cout << "Block found at position (" << i << ", " << j << ")\n";
-                    blockFound = true;
+                        cout << endl;
+                        cout << "\nThe middle cell of a horizontal to vertical blinker is " << i << ", " << j << endl;
+                        blinkerHToVFound = true;
+                        return true;
+
+                    }
                 }
             }
         }
-        if (!blockFound) {
-            cout << "No blocks found.\n";
+    }
+
+    /*bool checkForBlinkerVToH() {
+        for (int i = 1; i < rows - 1; ++i) {
+            for (int j = 1; j < cols - 1; ++j) {
+                if (grid[i][j] == 1 && grid[i - 1][j] == 1 && grid[i + 1][j] == 1) {
+
+                    if ((countAliveNeighbors(i, j) == 2) && (countAliveNeighbors(i - 1, j) == 1) && (countAliveNeighbors(i + 1, j) == 1)
+                        && (countAliveNeighbors(i - 1, j + 1) == 2) && (countAliveNeighbors(i + 1, j + 1) == 2) && (countAliveNeighbors(i + 1, j - 1) == 2)
+                        && (countAliveNeighbors(i - 1, j - 1) == 2)) {
+
+                        cout << endl;
+                        cout << "\nThe middle cell of a vertical to horizontal blinker is " << i << ", " << j << endl;
+                        blinkerVToHFound = true;
+                        return true;
+
+
+                    }
+                }
+            }
         }
     }*/
+
+    bool checkForToad() {
+        for (int i = 1; i < rows - 2; ++i) {
+            for (int j = 3; j < cols; ++j) {
+                if (grid[i][j] == 1 && grid[i][j - 1] == 1 && grid[i][j - 2] == 1
+                    && grid[i + 1][j - 1] == 1 && grid[i + 1][j - 2] == 1 && grid[i + 1][j - 3] == 1) {
+
+                    if ((countAliveNeighbors(i, j) == 2) && (countAliveNeighbors(i, j - 1) == 4) && (countAliveNeighbors(i, j - 2) == 4)
+                        && (countAliveNeighbors(i + 1, j - 1) == 4) && (countAliveNeighbors(i + 1, j - 2) == 4) && (countAliveNeighbors(i + 1, j - 3) == 2)
+                        && (countAliveNeighbors(i + 2, j) == 1) && (countAliveNeighbors(i + 2, j - 3) == 2) && (countAliveNeighbors(i - 1, j - 3) == 1) && (countAliveNeighbors(i - 1, j) == 2)) {
+
+                        cout << endl;
+                        cout << "\nThe top right of the toad is " << i << ", " << j << endl;
+                        toadFound = true;
+                        return true;
+                    }
+
+                }
+
+                //Put other variations/orientations of toads here in an if grid statement if need be.
+                //Orientation of the one already coded is in discord
+            }
+        }
+
+
+    }
+
+
+
+
 
 public:
 
@@ -336,10 +392,21 @@ public:
 
             thread blockCheckThread(&GameOfLife::checkForBlocks, this);
             blockCheckThread.join();
+
             thread horizontalBeehiveThread(&GameOfLife::checkForHorizontalBeehive, this);
             horizontalBeehiveThread.join();
+
             thread verticalBeehiveThread(&GameOfLife::checkForVerticalBehhive, this);
             verticalBeehiveThread.join();
+
+            thread blinkerHToVThread(&GameOfLife::checkForBlinkerHtoV, this);
+            blinkerHToVThread.join();
+
+            thread toadThread(&GameOfLife::checkForToad, this);
+            toadThread.join();
+            
+            //thread blinkerVToHThread(&GameOfLife::checkForBlinkerVToH, this);
+            //blinkerVToHThread.join();
 
             if (blockFound) {
                 cout << "Simulation paused because a block was detected\n";
@@ -443,6 +510,107 @@ public:
                 }
             }
 
+            if (blinkerHToVFound) {
+                cout << "Simulation paused because a horizontal to vertical blinker was detected\n";
+                cout << "Press 'r' to resume or 's' to save or 'q' to quit.\n";
+
+                // Pause the simulation and wait for user input
+                while (true) {
+                    char ch = _getch();
+                    if (ch == 'r' || ch == 'R') {
+                        break; // Resume the simulation
+                    }
+                    else if (ch == 'q' || ch == 'Q') {
+                        exit(0); // Quit the simulation
+                    }
+                    else if (ch == 's' || ch == 'S') {
+                        string fileName;
+                        char iOrC;
+                        cout << "Enter filename to save to: ";
+                        cin >> fileName;
+                        cout << endl;
+                        cout << "Press 'i' if you want to save the grid of step 1 or press 'c' if you want to save the current step. \n";
+                        cin >> iOrC;
+                        saveGame(fileName, iOrC);
+                        cout << "\nSimulation saved. Press 'R' to resume or any other key to quit.\n";
+                        char secondChoice = _getch();
+                        if (secondChoice == 'r' || secondChoice == 'R') {
+                            continue;
+                        }
+                        else {
+                            return;
+                        }
+                    }
+                }
+            }
+
+            /*if (blinkerVToHFound) {
+                cout << "Simulation paused because a vertical to horizontal blinker was detected\n";
+                cout << "Press 'r' to resume or 's' to save or 'q' to quit.\n";
+
+                // Pause the simulation and wait for user input
+                while (true) {
+                    char ch = _getch();
+                    if (ch == 'r' || ch == 'R') {
+                        break; // Resume the simulation
+                    }
+                    else if (ch == 'q' || ch == 'Q') {
+                        exit(0); // Quit the simulation
+                    }
+                    else if (ch == 's' || ch == 'S') {
+                        string fileName;
+                        char iOrC;
+                        cout << "Enter filename to save to: ";
+                        cin >> fileName;
+                        cout << endl;
+                        cout << "Press 'i' if you want to save the grid of step 1 or press 'c' if you want to save the current step. \n";
+                        cin >> iOrC;
+                        saveGame(fileName, iOrC);
+                        cout << "\nSimulation saved. Press 'R' to resume or any other key to quit.\n";
+                        char secondChoice = _getch();
+                        if (secondChoice == 'r' || secondChoice == 'R') {
+                            continue;
+                        }
+                        else {
+                            return;
+                        }
+                    }
+                }
+            }*/
+
+            if (toadFound) {
+                cout << "Simulation paused because a toad was detected\n";
+                cout << "Press 'r' to resume or 's' to save or 'q' to quit.\n";
+
+                // Pause the simulation and wait for user input
+                while (true) {
+                    char ch = _getch();
+                    if (ch == 'r' || ch == 'R') {
+                        break; // Resume the simulation
+                    }
+                    else if (ch == 'q' || ch == 'Q') {
+                        exit(0); // Quit the simulation
+                    }
+                    else if (ch == 's' || ch == 'S') {
+                        string fileName;
+                        char iOrC;
+                        cout << "Enter filename to save to: ";
+                        cin >> fileName;
+                        cout << endl;
+                        cout << "Press 'i' if you want to save the grid of step 1 or press 'c' if you want to save the current step. \n";
+                        cin >> iOrC;
+                        saveGame(fileName, iOrC);
+                        cout << "\nSimulation saved. Press 'R' to resume or any other key to quit.\n";
+                        char secondChoice = _getch();
+                        if (secondChoice == 'r' || secondChoice == 'R') {
+                            continue;
+                        }
+                        else {
+                            return;
+                        }
+                    }
+                }
+            }
 
             //cout << "Step " << i + 1 << ": \n";
             //cout << *this;
