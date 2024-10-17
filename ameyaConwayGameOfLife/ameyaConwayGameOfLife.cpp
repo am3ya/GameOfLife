@@ -6,7 +6,6 @@
 #include <fstream>
 #include <conio.h>
 #include <thread>
-//#include <unistd.h> // for sleep in Linux. Use <windows.h> and Sleep(ms) for Windows
 #include <windows.h>
 
 using namespace std;
@@ -43,27 +42,6 @@ private:
         return aliveNeighbors;
     }
 
-    // Detect if there's a block
-    /*bool isBlockAt(int x, int y) {
-        // Check if (x, y) is the top-left corner of a 2x2 block
-        if (isValid(x, y) && isValid(x + 1, y) && isValid(x, y + 1) && isValid(x + 1, y + 1)) {
-            if (grid[x][y] == 1 && grid[x + 1][y] == 1 && grid[x][y + 1] == 1 && grid[x + 1][y + 1] == 1) {
-                // Now check surrounding neighbors
-                for (int i = -1; i <= 2; ++i) {
-                    for (int j = -1; j <= 2; ++j) {
-                        if (!(i == 0 && j == 0) && !(i == 1 && j == 1) && isValid(x + i, y + j)) {
-                            if (grid[x + i][y + j] == 1) {
-                                return false; // There's an alive neighbor around the block
-                            }
-                        }
-                    }
-                }
-                return true; // Found a block
-            }
-        }
-        return false;
-    }*/
-
     // Update the grid for the next step
     void updateGrid() {
         tempGrid = grid; // Copy current state
@@ -94,8 +72,6 @@ private:
     // Display the grid
     void displayGrid() {
         cout << "\033[H";
-        //int stepCount = 1;
-        //system("CLS"); // Clears the console (use "CLS" for Windows)
         cout << "Step " << stepCount << ": " << "\n";
         for (int i = 0; i < rows; ++i) {
             for (int j = 0; j < cols - 1; ++j) {
@@ -105,9 +81,6 @@ private:
             cout << ".\n"; // Show grid boundaries
         }
         stepCount = stepCount + 1;
-        //for (int j = 0; j <= cols; ++j)
-            //cout << ".   "; // Bottom row grid boundary
-        //cout << "\n";
     }
 
     bool checkForBlocks() {
@@ -120,98 +93,10 @@ private:
                         cout << "\nTop left of the block is " << i << ", " << j << endl;
                         blockFound = true;
                         return true;
-                        //cout << "\nTop left of the block is " << i << ", " << j << endl;
                     }
-
-                    /*if (isValid(i - 1, j - 1)) {
-                        if (grid[i - 1][j - 1] == 1) {
-                            return false;
-                        }
-                    }
-
-                    if (isValid(i - 1, j)) {
-                        if (grid[i - 1][j] == 1) {
-                            return false;
-                        }
-                    }
-
-                    if (isValid(i - 1, j + 1)) {
-                        if (grid[i - 1][j + 1] == 1) {
-                            return false;
-                        }
-                    }
-
-                    if (isValid(i - 1, j + 2)) {
-                        if (grid[i - 1][j + 2] == 1) {
-                            return false;
-                        }
-                    }
-
-                    if (isValid(i, j + 2)) {
-                        if (grid[i][j + 2] == 1) {
-                            return false;
-                        }
-                    }
-
-                    if (isValid(i + 1, j + 2)) {
-                        if (grid[i + 1][j + 2] == 1) {
-                            return false;
-                        }
-                    }
-
-                    if (isValid(i + 2, j + 2)) {
-                        if (grid[i + 2][j + 2] == 1) {
-                            return false;
-                        }
-                    }
-
-                    if (isValid(i + 2, j + 1)) {
-                        if (grid[i + 2][j + 1] == 1) {
-                            return false;
-                        }
-                    }
-
-                    if (isValid(i + 2, j)) {
-                        if (grid[i + 2][j] == 1) {
-                            return false;
-                        }
-                    }
-
-                    if (isValid(i + 2, j - 1)) {
-                        if (grid[i + 2][j - 1] == 1) {
-                            return false;
-                        }
-                    }
-
-                    if (isValid(i + 1, j - 1)) {
-                        if (grid[i + 1][j - 1] == 1) {
-                            return false;
-                        }
-                    }
-
-                    if (isValid(i , j - 1)) {
-                        if (grid[i][j - 1] == 1) {
-                            return false;
-                        }
-                    }
-
-                    blockFound = true;
-                    return true;*/
-
-
-                    
-                    /*if (grid[i - 1][j - 1] == 0 && grid[i - 1][j] == 0 && grid[i - 1][j + 1] == 0 && grid[i - 1][j + 2] == 0
-                        && grid[i][j + 2] == 0 && grid[i + 1][j + 2] == 0 && grid[i + 2][j + 2] == 0 && grid[i + 2][j + 1] == 0
-                        && grid[i + 2][j] == 0 && grid[i + 2][j - 1] == 0 && grid[i + 1][j - 1] == 0 && grid[i][j - 1] == 0) {
-                        //blockStep = stepCount;
-                        //cout << "\nA block has been formed" << endl;
-                        return true;
-                    }*/
                 }
             }
         }
-        //return false;
-        //cout << "No blocks found. \n";
     }
 
 
@@ -399,31 +284,12 @@ public:
     }
 
     // Initialize the grid with random alive cells
-    /*void initializeGrid(int aliveCells) {
-        srand(time(0)); // Seed for random number generation
-        for (int i = 0; i < aliveCells; ++i) {
-            int x = rand() % rows;
-            int y = rand() % cols;
-            grid[x][y] = 1;
-        }
-    }*/
-
-    // Initialize the grid with random alive cells
     void initializeGrid(int aliveCells) {
         srand(time(0)); // Seed for random number generation
         int placedCells = 0;
         while (placedCells < aliveCells) {
             int x = rand() % rows;
             int y = rand() % cols;
-
-
-            //Toad test
-            grid[21][22] = 1;
-            grid[22][22] = 1;
-            grid[23][22] = 1;
-            grid[22][21] = 1;
-            grid[23][21] = 1;
-            grid[24][21] = 1;
 
             // Check if the cell is already alive
             if (grid[x][y] == 0) {
@@ -434,22 +300,10 @@ public:
         initialGrid = grid;
     }
 
-    // Overloading the << operator to print the grid
-    /*friend ostream& operator<<(ostream& os, const GameOfLife& game) {
-        os << "\033[H";
-        //int stepCount = 1;
-        //system("CLS"); // Clears the console (use "CLS" for Windows)
-        //os << "Step " << game.stepCount << ": " << "\n";
-        for (int i = 0; i < game.rows; ++i) {
-            for (int j = 0; j < game.cols; ++j) {
-                os << ". ";
-                os << (game.grid[i][j] ? 'O' : ' ') << " ";
-            }
-            os << ".\n";
-        }
-        //game.stepCount++;
-        return os;
-    }*/
+
+    GameOfLife operator+(const  GameOfLife& other) const {
+        return *this;
+    }
 
     // Run the game for a given number of steps
     void run(int steps) {
@@ -793,8 +647,6 @@ public:
                 }
             }
 
-            //cout << "Step " << i + 1 << ": \n";
-            //cout << *this;
             if (_kbhit()) {
                 char ch = _getch();
                 if (ch == 'p' || ch == 'P') {
@@ -900,6 +752,7 @@ int main() {
     int rows, cols, aliveCells, steps;
     char choice;
     GameOfLife* game = nullptr;
+    //GameOfLife* game2 = nullptr;
 
     cout << "Do you want to load a saved game? (Y/N): ";
     cin >> choice;
@@ -920,27 +773,20 @@ int main() {
             aliveCells = getValidatedInput<int>("Enter the number of initial alive cells: ");
             steps = getValidatedInput<int>("Enter the number of steps: ");
 
-            game = new GameOfLife(rows, cols);
-            game->initializeGrid(aliveCells);
+            //game = new GameOfLife(rows, cols);
+            GameOfLife game1(rows, cols);
+            GameOfLife game2(rows, cols);
+            game1.initializeGrid(aliveCells);
+            game2.initializeGrid(aliveCells);
+            GameOfLife theGame = game1 + game2;
+            //game2 = new GameOfLife(rows, cols);
+            //game->initializeGrid(aliveCells);
             system("CLS");
-            game->run(steps);
+            //game->run(steps);
+            theGame.run(steps);
     }
 
     delete game;
+    //delete game2;
     return 0;
-
-    /*cout << "Enter the number of rows: ";
-    cin >> rows;
-    cout << "Enter the number of columns: ";
-    cin >> cols;
-    cout << "Enter the number of initial alive cells: ";
-    cin >> aliveCells;
-    cout << "Enter the number of steps: ";
-    cin >> steps;
-
-    GameOfLife game(rows, cols);
-    game.initializeGrid(aliveCells);
-    game.run(steps);
-
-    return 0;*/
 }
