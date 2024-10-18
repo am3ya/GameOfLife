@@ -1,11 +1,11 @@
 ﻿  ameyaConwayGameOfLife.cpp
-C:\Users\Ameya\source\repos\GameOfLife\ameyaConwayGameOfLife\ameyaConwayGameOfLife.cpp(413,19): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Users\Ameya\source\repos\GameOfLife\ameyaConwayGameOfLife\ameyaConwayGameOfLife.cpp(215,1): warning C4715: 'GameOfLife::checkForBlocks': not all control paths return a value
-C:\Users\Ameya\source\repos\GameOfLife\ameyaConwayGameOfLife\ameyaConwayGameOfLife.cpp(238,1): warning C4715: 'GameOfLife::checkForHorizontalBeehive': not all control paths return a value
-C:\Users\Ameya\source\repos\GameOfLife\ameyaConwayGameOfLife\ameyaConwayGameOfLife.cpp(280,1): warning C4715: 'GameOfLife::checkForBlinkerHtoV': not all control paths return a value
-C:\Users\Ameya\source\repos\GameOfLife\ameyaConwayGameOfLife\ameyaConwayGameOfLife.cpp(322,1): warning C4715: 'GameOfLife::checkForToad': not all control paths return a value
-C:\Users\Ameya\source\repos\GameOfLife\ameyaConwayGameOfLife\ameyaConwayGameOfLife.cpp(343,1): warning C4715: 'GameOfLife::checkforToad2': not all control paths return a value
-C:\Users\Ameya\source\repos\GameOfLife\ameyaConwayGameOfLife\ameyaConwayGameOfLife.cpp(260,1): warning C4715: 'GameOfLife::checkForVerticalBehhive': not all control paths return a value
-C:\Users\Ameya\source\repos\GameOfLife\ameyaConwayGameOfLife\ameyaConwayGameOfLife.cpp(365,1): warning C4715: 'GameOfLife::checkForToad3': not all control paths return a value
-C:\Users\Ameya\source\repos\GameOfLife\ameyaConwayGameOfLife\ameyaConwayGameOfLife.cpp(387,1): warning C4715: 'GameOfLife::checkForToad4': not all control paths return a value
+C:\Users\Ameya\source\repos\GameOfLife\ameyaConwayGameOfLife\ameyaConwayGameOfLife.cpp(288,19): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\Ameya\source\repos\GameOfLife\ameyaConwayGameOfLife\ameyaConwayGameOfLife.cpp(100,1): warning C4715: 'GameOfLife::checkForBlocks': not all control paths return a value
+C:\Users\Ameya\source\repos\GameOfLife\ameyaConwayGameOfLife\ameyaConwayGameOfLife.cpp(123,1): warning C4715: 'GameOfLife::checkForHorizontalBeehive': not all control paths return a value
+C:\Users\Ameya\source\repos\GameOfLife\ameyaConwayGameOfLife\ameyaConwayGameOfLife.cpp(145,1): warning C4715: 'GameOfLife::checkForVerticalBehhive': not all control paths return a value
+C:\Users\Ameya\source\repos\GameOfLife\ameyaConwayGameOfLife\ameyaConwayGameOfLife.cpp(165,1): warning C4715: 'GameOfLife::checkForBlinkerHtoV': not all control paths return a value
+C:\Users\Ameya\source\repos\GameOfLife\ameyaConwayGameOfLife\ameyaConwayGameOfLife.cpp(207,1): warning C4715: 'GameOfLife::checkForToad': not all control paths return a value
+C:\Users\Ameya\source\repos\GameOfLife\ameyaConwayGameOfLife\ameyaConwayGameOfLife.cpp(228,1): warning C4715: 'GameOfLife::checkforToad2': not all control paths return a value
+C:\Users\Ameya\source\repos\GameOfLife\ameyaConwayGameOfLife\ameyaConwayGameOfLife.cpp(250,1): warning C4715: 'GameOfLife::checkForToad3': not all control paths return a value
+C:\Users\Ameya\source\repos\GameOfLife\ameyaConwayGameOfLife\ameyaConwayGameOfLife.cpp(272,1): warning C4715: 'GameOfLife::checkForToad4': not all control paths return a value
   ameyaConwayGameOfLife.vcxproj -> C:\Users\Ameya\Source\Repos\GameOfLife\x64\Debug\ameyaConwayGameOfLife.exe
